@@ -24,11 +24,23 @@ class TwitterInfo < Sinatra::Application
       haml :followers
     rescue Twitter::NotFound
       halt 404, "Way to go, buddy. There's no page for #{@user}"
-    rescue
-      halt 404, "Holy hell, something exploded."
     end
+  end
 
+  get '/mostrecent' do
+    haml :mostrecentblank
+  end
 
+  get '/mostrecent/:username' do
+    
+    @user = params[:username]
+    
+    if @user
+      @msg = Twitter.user_timeline(@user).first.text
+      haml :mostrecent
+    else
+      haml :mostrecentblank
+    end
   end
 
   post // do
